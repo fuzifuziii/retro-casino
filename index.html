@@ -1,0 +1,219 @@
+<!-- by fuzifuziii -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retro Casino</title>
+    <link rel="icon" href="r.ico" type="image/x-icon">
+    <!-- Пиксельный шрифт -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Ретро эффекты -->
+    <div class="crt-overlay"></div>
+    <div class="scanlines"></div>
+
+    <div class="game-over-overlay" id="game-over-screen">
+        <div class="game-over-box">
+            <div class="game-over-title">ПОРАЖЕНИЕ</div>
+            <p class="game-over-msg">ВЫ ОБАНКРОТИЛИСЬ И ПОТЕРЯЛИ ВСЕ!</p>
+            <button class="retry-btn" onclick="resetGameFromGameOver()">СБРОС</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        
+        <!-- Боковая панель -->
+        <aside class="sidebar">
+            <div class="sidebar-title">РЕТРО КАЗИНО</div>
+            
+            <!-- Общий счётчик монет -->
+            <div class="sidebar-balance">
+                <div class="balance-label">ТОКЕНЫ</div>
+                <div class="balance-value">₸<span class="sync-balance">1000</span></div>
+            </div>
+
+            <nav class="sidebar-menu" id="sidebar-menu">
+                <button class="nav-btn active" data-tab="tab-home">🏠 ГЛАВНАЯ</button>
+                <button class="nav-btn" data-tab="tab-slots">🎰 СЛОТЫ</button>
+                <button class="nav-btn" data-tab="tab-roulette">🎯 РУЛЕТКА</button>
+                <button class="nav-btn" data-tab="tab-shop">🛒 МАГАЗИН</button>
+                <button class="nav-btn" data-tab="tab-promo">🎫 ПРОМОКОДЫ</button>
+            </nav>
+            <div class="sidebar-footer">v4.0</div>
+        </aside>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            
+            <!-- Вкладка 1: Главная -->
+            <section id="tab-home" class="tab-section active-tab">
+                <div class="lobby-container">
+                    <h1 class="lobby-title">ДОБРО ПОЖАЛОВАТЬ В РЕТРО КАЗИНО!</h1>
+                    <p class="lobby-subtitle">ВЫБЕРИ ИГРУ НА БОКОВОЙ ПАНЕЛИ, ЧТОБЫ НАЧАТЬ</p>
+                    
+                    <div class="stats-card">
+                        <div class="stats-header">СТАТИСТИКА ИГРОКА</div>
+                        <p>СТАТУС: ВИП КЛИЕНТ</p>
+                    </div>
+
+                    <div class="rules-box">
+                        <div class="rules-header">ИНФОРМАЦИЯ</div>
+                        <p>Каждая прокрутка в слотах и рулетке стоит ₸100.</p>
+                        <p>Загляни в МАГАЗИН, чтобы кастомизировать автомат!</p>
+                        <p>Есть секретный код? Введи его во вкладке ПРОМОКОДЫ!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Вкладка 2: Слоты -->
+            <section id="tab-slots" class="tab-section">
+                <div class="casino-container">
+                    <div class="slot-machine-wrapper">
+                        <div class="slot-machine" id="machine-body">
+                            <div class="machine-header">ПИКСЛОТЫ</div>
+                            <div class="screen">
+                                <div class="reel" id="reel1">💎</div>
+                                <div class="reel" id="reel2">💎</div>
+                                <div class="reel" id="reel3">💎</div>
+                            </div>
+                            <div class="machine-footer">ДЁРНИ РЫЧАГ</div>
+                        </div>
+
+                        <div class="lever-container" id="lever-container">
+                            <div class="lever-base"></div>
+                            <div class="lever-shaft" id="lever-shaft">
+                                <div class="lever-knob" id="lever-knob"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="message-box">
+                        <div class="message" id="msg">ПРОВЕРИМ ТВОЮ УДАЧУ</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Вкладка 3: Рулетка -->
+            <section id="tab-roulette" class="tab-section">
+                <div class="roulette-container">
+                    <h2 class="roulette-title">DVD РУЛЕТКА</h2>
+                    <div class="roulette-screen-wrapper">
+                        <canvas id="roulette-canvas" width="450" height="300"></canvas>
+                        <div class="roulette-target-zone">ЗОНА ДЖЕКПОТА</div>
+                    </div>
+                    
+                    <button class="roulette-action-btn" id="roulette-btn">НАЧАТЬ ИГРУ (₸100)</button>
+                    
+                    <div class="message-box" style="transform: none; margin-top: 15px;">
+                        <div class="message" id="roulette-msg">НАЖМИ СТАРТ И ПОЙМАЙ РУЛЕТКУ!</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Вкладка 4: Магазин -->
+            <section id="tab-shop" class="tab-section">
+                <div class="shop-container">
+                    <h2 class="shop-title">СКИНЫ СЛОТОВ</h2>
+                    <p class="shop-subtitle">ВЫБЕРИТЕ СТИЛЬ ДЛЯ ВАШЕГО АВТОМАТА</p>
+                    
+                    <div class="shop-grid">
+                        <div class="shop-card current" id="card-default">
+                            <div class="skin-preview preview-default"></div>
+                            <div class="skin-name">RETRO RED</div>
+                            <button class="shop-btn" id="btn-skin-default" disabled>ЭКИПИРОВАНО</button>
+                        </div>
+
+                        <div class="shop-card" id="card-neon">
+                            <div class="skin-preview preview-neon"></div>
+                            <div class="skin-name">CYBER NEON</div>
+                            <button class="shop-btn btn-buy" id="btn-skin-neon" data-skin="neon" data-price="1500">КУПИТЬ ЗА ₸1500</button>
+                        </div>
+
+                        <div class="shop-card" id="card-blue">
+                            <div class="skin-preview preview-blue"></div>
+                            <div class="skin-name">DEEP BLUE</div>
+                            <button class="shop-btn btn-buy" id="btn-skin-blue" data-skin="blue" data-price="1900">КУПИТЬ ЗА ₸1900</button>
+                        </div>
+
+                        <div class="shop-card" id="card-grey">
+                            <div class="skin-preview preview-grey"></div>
+                            <div class="skin-name">DARK SLATE</div>
+                            <button class="shop-btn btn-buy" id="btn-skin-grey" data-skin="grey" data-price="2400">КУПИТЬ ЗА ₸2400</button>
+                        </div>
+
+                        <div class="shop-card" id="card-gold">
+                            <div class="skin-preview preview-gold"></div>
+                            <div class="skin-name">GOLD DELUXE</div>
+                            <button class="shop-btn btn-buy" id="btn-skin-gold" data-skin="gold" data-price="3000">КУПИТЬ ЗА ₸3000</button>
+                        </div>
+
+                        <div class="shop-card" id="card-green">
+                            <div class="skin-preview preview-green"></div>
+                            <div class="skin-name">MATRIX GREEN</div>
+                            <button class="shop-btn btn-buy" id="btn-skin-green" data-skin="green" data-price="5000">КУПИТЬ ЗА ₸5000</button>
+                        </div>
+
+                        <div class="shop-card" id="card-wave">
+                            <div class="skin-preview preview-wave"></div>
+                            <div class="skin-name">CYBER WAVE</div>
+                            <button class="shop-btn btn-buy" id="btn-skin-wave" data-skin="wave" data-price="7500">КУПИТЬ ЗА ₸7500</button>
+                        </div>
+
+                        <div class="shop-card" id="card-void">
+                            <div class="skin-preview preview-void"></div>
+                            <div class="skin-name">COSMIC VOID</div>
+                            <button class="shop-btn" id="btn-skin-void" data-skin="void" disabled>ТОЛЬКО ПО ПРОМОКОДУ</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Вкладка 5: Промокоды -->
+            <section id="tab-promo" class="tab-section">
+                <div class="promo-container">
+                    <h2 class="promo-title">ВВОД ПРОМОКОДОВ</h2>
+                    <p class="promo-subtitle">ВВОДИ СЕКРЕТНЫЕ КОДЫ ДЛЯ РАЗБЛОКИРОВКИ БОНУСОВ</p>
+                    
+                    <div class="promo-box">
+                        <input type="text" id="promo-input" placeholder="ВВЕДИТЕ ПРОМОКОД..." autocomplete="off">
+                        <button id="promo-submit-btn" onclick="submitPromoCode()">АКТИВИРОВАТЬ</button>
+                    </div>
+                    
+                    <div class="promo-msg" id="promo-msg">ОЖИДАНИЕ ВВОДА...</div>
+                </div>
+            </section>
+
+            <!-- Секретная вкладка 6: Админ -->
+            <section id="tab-admin" class="tab-section">
+                <div class="admin-panel-container">
+                    <h2 class="admin-title">⚡ СЕКРЕТНАЯ ПАНЕЛЬКА ⚡</h2>
+                    <p class="admin-subtitle">УПРАВЛЕНИЕ РЕСУРСАМИ И СОСТОЯНИЕМ ИГРЫ</p>
+                    
+                    <div class="admin-card">
+                        <div class="admin-section-title">ВЫДАЧА ТОКЕНОВ</div>
+                        <div class="admin-row">
+                            <button onclick="adminGiveMoney(100)">+₸100</button>
+                            <button onclick="adminGiveMoney(1000)">+₸1000</button>
+                            <button onclick="adminGiveMoney(-100)">-₸100</button>
+                            <button onclick="adminGiveMoney(-1000)">-₸1000</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
+                        <div class="admin-section-title">КРУТЫЕ ФУНКЦИИ</div>
+                        <div class="admin-row">
+                            <button class="btn-danger" onclick="adminResetStorage()">СБРОС</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
