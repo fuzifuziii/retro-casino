@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Retro Casino</title>
     <link rel="icon" href="r.ico" type="image/x-icon">
     <!-- Pixel font -->
@@ -14,6 +15,16 @@
     <div class="crt-overlay"></div>
     <div class="scanlines"></div>
 
+    <!-- Mobile Header Bar -->
+    <div class="mobile-header">
+        <button class="mobile-menu-btn" id="mobile-menu-toggle" onclick="toggleMobileSidebar()">☰</button>
+        <div class="mobile-title" data-i18n="retroCasino">РЕТРО КАЗИНО</div>
+        <div class="mobile-balance">₸<span class="sync-balance">1000</span></div>
+    </div>
+
+    <!-- Mobile Backdrop -->
+    <div class="sidebar-backdrop" id="sidebar-backdrop" onclick="toggleMobileSidebar()"></div>
+
     <div class="game-over-overlay" id="game-over-screen">
         <div class="game-over-box">
             <div class="game-over-title" data-i18n="defeat">ПОРАЖЕНИЕ</div>
@@ -25,7 +36,7 @@
     <div class="app-container">
         
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-title" data-i18n="retroCasino">РЕТРО КАЗИНО</div>
             
             <!-- Language Selector -->

@@ -772,3 +772,105 @@ setupTabNavigation();
 updateBalanceDisplay();
 applySkin();
 checkBankruptStatus();
+
+// Mobile Sidebar Toggle
+window.toggleMobileSidebar = function() {
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    sidebar.classList.toggle('open');
+    backdrop.classList.toggle('active');
+};
+
+// Auto close sidebar on mobile when tab clicked
+function handleTabClick(e) {
+    if (isSpinning) return; 
+
+    const clickedButton = e.currentTarget;
+    navButtons.forEach(btn => btn.classList.remove('active'));
+    clickedButton.classList.add('active');
+
+    const targetTabId = clickedButton.getAttribute('data-tab');
+    tabSections.forEach(section => section.classList.remove('active-tab'));
+    document.getElementById(targetTabId).classList.add('active-tab');
+    
+    // Close sidebar on touch devices after choosing a menu item
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        backdrop.classList.remove('active');
+    }
+
+    if (targetTabId === 'tab-shop') {
+        renderShop();
+    }
+    
+    if (targetTabId === 'tab-roulette') {
+        drawDvdStatic();
+    } else {
+        if (rouletteActive) {
+            stopRouletteGame(false);
+        }
+    }
+    
+    playSound('click');
+}
+
+// Touch and Mouse Lever Control
+function handleDragStart(clientY) {
+    if (isSpinning) return;
+    if (balance < 100) {
+        checkBankruptStatus();
+        return;
+    }
+    isDragging = true;
+    startY = clientY;
+    shaft.classList.remove('lever-returning');
+    playSound('click');
+}
+
+function handleDragMove(clientY) {
+    if (!isDragging) return;
+
+    let deltaY = clientY - startY;
+    if (deltaY < 0) deltaY = 0;
+    if (deltaY > maxPull) deltaY = maxPull;
+
+    let scaleY = 1 - (deltaY / maxPull) * 0.75;
+    shaft.style.transform = `scaleY(${scaleY})`;
+
+    if (deltaY >= maxPull * 0.9) {
+        triggerSpin();
+    }
+}
+
+// Mouse events
+knob.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    handleDragStart(e.clientY);
+});
+
+window.addEventListener('mousemove', (e) => {
+    handleDragMove(e.clientY);
+});
+
+window.addEventListener('mouseup', () => {
+    if (!isDragging) return;
+    resetLever();
+});
+
+// Touch events for mobile phones
+knob.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    handleDragStart(e.touches[0].clientY);
+}, { passive: false });
+
+window.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    handleDragMove(e.touches[0].clientY);
+}, { passive: false });
+
+window.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    resetLever();
+});

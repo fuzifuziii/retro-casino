@@ -730,3 +730,191 @@ body {
     border-color: #000;
     box-shadow: inset 2px 2px 0px #b30059;
 }
+
+/* Mobile Top Bar (Hidden on desktop) */
+.mobile-header {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background-color: #1a0c2e;
+    border-bottom: 3px solid #ff007f;
+    z-index: 100;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.mobile-menu-btn {
+    background: #ff007f;
+    color: #fff;
+    border: none;
+    font-size: 20px;
+    padding: 4px 10px;
+    cursor: pointer;
+    box-shadow: 2px 2px 0px #000;
+}
+
+.mobile-title {
+    font-size: 11px;
+    color: #00ffcc;
+    font-family: 'Press Start 2P', monospace;
+}
+
+.mobile-balance {
+    font-size: 11px;
+    color: #ffcc00;
+    font-family: 'Press Start 2P', monospace;
+}
+
+/* Sidebar Overlay Backdrop */
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 101;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-backdrop.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Tablet and Mobile Media Query */
+@media (max-width: 850px) {
+    .mobile-header {
+        display: flex;
+    }
+
+    .app-container {
+        flex-direction: column;
+        padding-top: 50px;
+        height: 100vh;
+    }
+
+    /* Transform Sidebar into Slide-out Menu */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        width: 260px;
+        height: 100%;
+        z-index: 102;
+        transition: left 0.3s ease;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.8);
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .main-content {
+        padding: 15px 10px;
+        overflow-y: auto;
+    }
+
+    /* Scaling Slot Machine for Small Displays */
+    .slot-machine-wrapper {
+        transform: scale(0.85);
+        transform-origin: top center;
+        margin-bottom: -30px;
+    }
+
+    .screen {
+        gap: 6px;
+        padding: 10px;
+    }
+
+    .reel {
+        width: 60px;
+        height: 70px;
+        font-size: 32px;
+        line-height: 70px;
+    }
+
+    /* Scaling DVD Canvas */
+    .roulette-screen-wrapper {
+        width: 100%;
+        max-width: 380px;
+    }
+
+    #roulette-canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Shop Grid Mobile */
+    .shop-grid {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+    }
+
+    .shop-card {
+        padding: 10px;
+    }
+
+    .skin-preview {
+        height: 60px;
+    }
+
+    .skin-name {
+        font-size: 8px;
+    }
+
+    .shop-btn {
+        font-size: 8px;
+        padding: 8px 4px;
+    }
+
+    /* Promo and Admin Panels */
+    .promo-box {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .promo-box input, 
+    .promo-box button {
+        width: 100%;
+    }
+
+    .admin-row {
+        flex-wrap: wrap;
+    }
+
+    .admin-row button {
+        flex: 1 1 40%;
+        font-size: 9px;
+    }
+
+    .lobby-title {
+        font-size: 14px;
+    }
+
+    .lobby-subtitle {
+        font-size: 8px;
+    }
+}
+
+/* Ultra Small Screens (iPhone SE / small Androids) */
+@media (max-width: 400px) {
+    .slot-machine-wrapper {
+        transform: scale(0.72);
+        margin-bottom: -60px;
+    }
+
+    .reel {
+        width: 50px;
+        height: 60px;
+        font-size: 26px;
+        line-height: 60px;
+    }
+}
