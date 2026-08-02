@@ -559,17 +559,19 @@ function triggerSpin() {
 
 // Roulette engine logic
 function drawDvdStatic() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     ctx.save();
-    ctx.strokeStyle = 'rgba(0, 255, 204, 0.4)';
+    ctx.strokeStyle = 'rgba(0, 255, 204, 0.5)';
     ctx.lineWidth = 2;
-    ctx.setLineDash([6, 6]); // Пунктир
+    ctx.setLineDash([6, 6]);
     ctx.strokeRect(100, 75, 250, 150);
 
-    ctx.fillStyle = 'rgba(0, 255, 204, 0.25)';
-    ctx.font = '12px "Press Start 2P"';
+    ctx.fillStyle = 'rgba(0, 255, 204, 0.4)';
+    ctx.font = '10px "Press Start 2P"';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(i18nData[currentLang].jackpotZone || "JACKPOT ZONE", 225, 150);

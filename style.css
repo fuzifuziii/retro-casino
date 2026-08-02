@@ -431,9 +431,32 @@ body {
 }
 
 .slot-machine-wrapper {
-    display: flex;
-    align-items: flex-end;
-    gap: 15px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 50px; 
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+/* Mobile */
+@media (max-width: 850px) {
+    .slot-machine-wrapper {
+        transform: scale(0.85);
+        transform-origin: center center;
+        /* Компактный паддинг под рычаг */
+        padding-right: 40px; 
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .slot-machine-wrapper {
+        transform: scale(0.72);
+        transform-origin: center center;
+        padding-right: 35px;
+        margin: 0 auto;
+    }
 }
 
 .slot-machine {
@@ -589,6 +612,10 @@ body {
     cursor: pointer;
     box-shadow: inset -4px -4px 0px #21133a, 4px 4px 0px rgba(0,0,0,0.3);
 }
+.roulette-target-zone {
+    display: none !important;
+}
+
 .roulette-action-btn:hover { background-color: #4c2f7e; }
 .roulette-action-btn:active { transform: translate(2px,2px); box-shadow: inset 2px 2px 0 #000; }
 
