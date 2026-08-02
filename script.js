@@ -1,3 +1,166 @@
+// Localization Dictionary
+let currentLang = localStorage.getItem('lang') || 'ru';
+
+const i18nData = {
+    ru: {
+        defeat: "ПОРАЖЕНИЕ",
+        bankruptMsg: "ВЫ ОБАНКРОТИЛИСЬ И ПОТЕРЯЛИ ВСЕ!",
+        reset: "СБРОС",
+        retroCasino: "РЕТРО КАЗИНО",
+        tokens: "ТОКЕНЫ",
+        navHome: "🏠 ГЛАВНАЯ",
+        navSlots: "🎰 СЛОТЫ",
+        navRoulette: "🎯 РУЛЕТКА",
+        navShop: "🛒 МАГАЗИН",
+        navPromo: "🎫 ПРОМОКОДЫ",
+        navAdmin: "⚙️ АДМИНКА",
+        welcome: "ДОБРО ПОЖАЛОВАТЬ В РЕТРО КАЗИНО!",
+        welcomeSub: "ВЫБЕРИ ИГРУ НА БОКОВОЙ ПАНЕЛИ, ЧТОБЫ НАЧАТЬ",
+        playerStats: "СТАТИСТИКА ИГРОКА",
+        vipStatus: "СТАТУС: ВИП КЛИЕНТ",
+        infoTitle: "ИНФОРМАЦИЯ",
+        ruleCost: "Каждая прокрутка в слотах и рулетке стоит ₸100.",
+        ruleShop: "Загляни в МАГАЗИН, чтобы кастомизировать автомат!",
+        rulePromo: "Есть секретный код? Введи его во вкладке ПРОМОКОДЫ!",
+        pixslots: "ПИКСЛОТЫ",
+        pullLever: "ДЁРНИ РЫЧАГ",
+        msgLuck: "ПРОВЕРИМ ТВОЮ УДАЧУ",
+        dvdTitle: "DVD РУЛЕТКА",
+        jackpotZone: "ЗОНА ДЖЕКПОТА",
+        startRoulette: "НАЧАТЬ ИГРУ (₸100)",
+        rouletteMsgStart: "НАЖМИ СТАРТ И ПОЙМАЙ РУЛЕТКУ!",
+        shopTitle: "СКИНЫ СЛОТОВ",
+        shopSub: "ВЫБЕРИТЕ СТИЛЬ ДЛЯ ВАШЕГО АВТОМАТА",
+        equipped: "ЭКИПИРОВАНО",
+        equip: "EQUIP",
+        buyFor: "КУПИТЬ ЗА ₸",
+        codeOnly: "ТОЛЬКО ПО ПРОМОКОДУ",
+        promoTitle: "ВВОД ПРОМОКОДОВ",
+        promoSub: "ВВОДИ СЕКРЕТНЫЕ КОДЫ ДЛЯ РАЗБЛОКИРОВКИ БОНУСОВ",
+        promoPlaceholder: "ВВЕДИТЕ ПРОМОКОД...",
+        promoActivate: "АКТИВИРОВАТЬ",
+        promoWait: "ОЖИДАНИЕ ВВОДА...",
+        adminTitle: "⚡ СЕКРЕТНАЯ ПАНЕЛЬКА ⚡",
+        adminSub: "УПРАВЛЕНИЕ РЕСУРСАМИ И СОСТОЯНИЕМ ИГРЫ",
+        adminGiveTokens: "ВЫДАЧА ТОКЕНОВ",
+        adminCoolFuncs: "КРУТЫЕ ФУНКЦИИ",
+        // Dynamic game messages
+        tryAgainNextTime: "ПОПРОБУЙ УДАЧУ В СЛЕДУЮЩИЙ РАЗ!",
+        emptyCode: "ПУСТО!",
+        voidUnlocked: "СКИН COSMIC VOID РАЗБЛОКИРОВАН!",
+        voidAlreadyUnlocked: "СКИН COSMIC VOID УЖЕ РАЗБЛОКИРОВАН!",
+        adminAlreadyActivated: "АДМИНКА УЖЕ АКТИВИРОВАНА!",
+        adminActivated: "АДМИНКА АКТИВИРОВАНА!",
+        invalidCode: "КОДА НЕ СУЩЕСТВУЕТ.",
+        spinning: "ПРОКРУТКА...",
+        skullFine: (skulls, fine) => `УПС! ЧЕРЕПОВ: ${skulls}. ШТРАФ: -₸${fine}`,
+        secretPromoFound: "СЕКРЕТНЫЙ ПРОМОКОД НАЙДЕН: DIOV",
+        jackpot: (win) => `ДЖЕКПОТ! +₸${win}`,
+        win: "ПОБЕДА! +₸200",
+        loseSlot: "ПРОИГРАЛ? ПОПРОБУЙ ЕЩЕ РАЗОК!",
+        rouletteBtnActive: "ПРЫГ-НЕ-СКОК!",
+        rouletteMsgActive: "ПРЫГ-СКОК... ОСТАНОВИ ЕГО В ЗОНЕ!",
+        rouletteSniper: (win) => `ДА ТЫ СНАЙПЕР, ТОЧНО В ЦЕЛЬ! +₸${win}`,
+        rouletteGood: (win) => `НЕПЛОХО! +₸${win}`,
+        rouletteMiss: "НЕ ПОПАЛ... ДАВАЙ ЕЩЕ!",
+        rouletteCanvasText: "РУЛЕТКА"
+    },
+    en: {
+        defeat: "DEFEAT",
+        bankruptMsg: "YOU WENT BANKRUPT AND LOST EVERYTHING!",
+        reset: "RESET",
+        retroCasino: "RETRO CASINO",
+        tokens: "TOKENS",
+        navHome: "🏠 HOME",
+        navSlots: "🎰 SLOTS",
+        navRoulette: "🎯 ROULETTE",
+        navShop: "🛒 SHOP",
+        navPromo: "🎫 PROMOCODES",
+        navAdmin: "⚙️ ADMIN",
+        welcome: "WELCOME TO RETRO CASINO!",
+        welcomeSub: "CHOOSE A GAME FROM THE SIDEBAR TO START",
+        playerStats: "PLAYER STATS",
+        vipStatus: "STATUS: VIP CLIENT",
+        infoTitle: "INFORMATION",
+        ruleCost: "Each spin in slots and roulette costs ₸100.",
+        ruleShop: "Check out the SHOP to customize your machine!",
+        rulePromo: "Got a secret code? Enter it in the PROMOCODES tab!",
+        pixslots: "PIXSLOTS",
+        pullLever: "PULL THE LEVER",
+        msgLuck: "LET'S TEST YOUR LUCK",
+        dvdTitle: "DVD ROULETTE",
+        jackpotZone: "JACKPOT ZONE",
+        startRoulette: "START GAME (₸100)",
+        rouletteMsgStart: "PRESS START AND CATCH THE ROULETTE!",
+        shopTitle: "SLOT SKINS",
+        shopSub: "CHOOSE A STYLE FOR YOUR SLOT MACHINE",
+        equipped: "EQUIPPED",
+        equip: "EQUIP",
+        buyFor: "BUY FOR ₸",
+        codeOnly: "PROMOCODE ONLY",
+        promoTitle: "ENTER PROMOCODES",
+        promoSub: "ENTER SECRET CODES TO UNLOCK BONUSES",
+        promoPlaceholder: "ENTER PROMOCODE...",
+        promoActivate: "ACTIVATE",
+        promoWait: "WAITING FOR INPUT...",
+        adminTitle: "⚡ SECRET PANEL ⚡",
+        adminSub: "MANAGE GAME RESOURCES AND STATE",
+        adminGiveTokens: "GIVE TOKENS",
+        adminCoolFuncs: "COOL FEATURES",
+        // Dynamic game messages
+        tryAgainNextTime: "TRY YOUR LUCK NEXT TIME!",
+        emptyCode: "EMPTY!",
+        voidUnlocked: "COSMIC VOID SKIN UNLOCKED!",
+        voidAlreadyUnlocked: "COSMIC VOID SKIN ALREADY UNLOCKED!",
+        adminAlreadyActivated: "ADMIN PANEL ALREADY ACTIVATED!",
+        adminActivated: "ADMIN PANEL ACTIVATED!",
+        invalidCode: "CODE DOES NOT EXIST.",
+        spinning: "SPINNING...",
+        skullFine: (skulls, fine) => `OOPS! SKULLS: ${skulls}. FINE: -₸${fine}`,
+        secretPromoFound: "SECRET PROMOCODE FOUND: DIOV",
+        jackpot: (win) => `JACKPOT! +₸${win}`,
+        win: "WIN! +₸200",
+        loseSlot: "LOST? TRY AGAIN!",
+        rouletteBtnActive: "STOP!",
+        rouletteMsgActive: "JUMPING... STOP IT IN THE ZONE!",
+        rouletteSniper: (win) => `BULLSEYE! YOU ARE A SNIPER! +₸${win}`,
+        rouletteGood: (win) => `NOT BAD! +₸${win}`,
+        rouletteMiss: "MISSED... TRY AGAIN!",
+        rouletteCanvasText: "ROULETTE"
+    }
+};
+
+function switchLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    const activeLangBtn = document.getElementById(`lang-${lang}`);
+    if (activeLangBtn) activeLangBtn.classList.add('active');
+
+    // Translate elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (i18nData[lang][key]) {
+            el.textContent = i18nData[lang][key];
+        }
+    });
+
+    // Translate placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (i18nData[lang][key]) {
+            el.placeholder = i18nData[lang][key];
+        }
+    });
+
+    // Refresh dynamic texts
+    renderShop();
+    if (!rouletteActive) {
+        drawDvdStatic();
+    }
+}
+
 // Slot state
 const symbols = ['💎', '🍒', '🪙', '💀', '🍀'];
 let balance = 1000;
@@ -205,7 +368,7 @@ window.resetGameFromGameOver = function() {
     checkBankruptStatus();
     setupTabNavigation();
     
-    msg.textContent = "ПОПРОБУЙ УДАЧУ В СЛЕДУЮЩИЙ РАЗ!";
+    msg.textContent = i18nData[currentLang].tryAgainNextTime;
     msg.style.color = "#ff007f";
     playSound('win');
 };
@@ -215,12 +378,13 @@ window.submitPromoCode = function() {
     const input = document.getElementById('promo-input');
     const promoMsg = document.getElementById('promo-msg');
     const code = input.value.trim().toLowerCase(); 
+    const lang = i18nData[currentLang];
     
     promoMsg.classList.remove('status-error', 'status-success');
     void promoMsg.offsetWidth; 
 
     if (code === '') {
-        promoMsg.textContent = "ПУСТО!";
+        promoMsg.textContent = lang.emptyCode;
         promoMsg.classList.add('status-error');
         playSound('lose');
         return;
@@ -231,13 +395,13 @@ window.submitPromoCode = function() {
             purchasedSkins.push('void');
             localStorage.setItem('purchasedSkins', JSON.stringify(purchasedSkins));
 
-            promoMsg.textContent = "СКИН COSMIC VOID РАЗБЛОКИРОВАН!";
+            promoMsg.textContent = lang.voidUnlocked;
             promoMsg.classList.add('status-success');
 
             renderShop();
             playSound('win');
         } else {
-            promoMsg.textContent = "СКИН COSMIC VOID УЖЕ РАЗБЛОКИРОВАН!";
+            promoMsg.textContent = lang.voidAlreadyUnlocked;
             promoMsg.classList.add('status-error');
             playSound('lose');
         }
@@ -248,7 +412,7 @@ window.submitPromoCode = function() {
 
     if (code === 'admin') {
         if (isAdminActivated) {
-            promoMsg.textContent = "АДМИНКА УЖЕ АКТИВИРОВАНА!";
+            promoMsg.textContent = lang.adminAlreadyActivated;
             promoMsg.classList.add('status-error');
             playSound('lose');
             return;
@@ -258,14 +422,14 @@ window.submitPromoCode = function() {
         sessionStorage.setItem('adminPanelUnlocked', 'true');
         buildAdminButton();
         
-        promoMsg.textContent = "АДМИНКА АКТИВИРОВАНА!";
+        promoMsg.textContent = lang.adminActivated;
         promoMsg.classList.add('status-success');
         playSound('win');
         input.value = '';
         return;
     }
 
-    promoMsg.textContent = "КОДА НЕ СУЩЕСТВУЕТ.";
+    promoMsg.textContent = lang.invalidCode;
     promoMsg.classList.add('status-error');
     playSound('lose');
 };
@@ -276,7 +440,8 @@ function buildAdminButton() {
     const adminBtn = document.createElement('button');
     adminBtn.className = 'nav-btn admin-nav-btn';
     adminBtn.setAttribute('data-tab', 'tab-admin');
-    adminBtn.innerHTML = '⚙️ АДМИНКА';
+    adminBtn.setAttribute('data-i18n', 'navAdmin');
+    adminBtn.innerHTML = i18nData[currentLang].navAdmin;
     
     const menu = document.getElementById('sidebar-menu');
     if (menu) menu.appendChild(adminBtn);
@@ -330,9 +495,10 @@ function triggerSpin() {
     isSpinning = true;
     resetLever();
 
+    const lang = i18nData[currentLang];
     balance -= 100;
     updateBalanceDisplay();
-    msg.textContent = "ПРОКРУТКА...";
+    msg.textContent = lang.spinning;
     msg.style.color = "#ffffff";
 
     reels.forEach(reel => reel.classList.add('spinning'));
@@ -353,13 +519,13 @@ function triggerSpin() {
         if (skullCount > 0) {
             const fine = skullCount * 50;
             balance = Math.max(0, balance - fine);
-            msg.textContent = `УПС! ЧЕРЕПОВ: ${skullCount}. ШТРАФ: -₸${fine}`;
+            msg.textContent = lang.skullFine(skullCount, fine);
             msg.style.color = "#ff0000";
             playSound('lose');
         } else if (results[0] === results[1] && results[1] === results[2]) {
             if (!localStorage.getItem('promo_diov_found') && Math.random() < 0.1) {
                 localStorage.setItem('promo_diov_found', 'true');
-                msg.textContent = "СЕКРЕТНЫЙ ПРОМОКОД НАЙДЕН: DIOV";
+                msg.textContent = lang.secretPromoFound;
                 msg.style.color = "#ffff00";
                 playSound('jack');
                 createCoinExplosion();
@@ -367,19 +533,19 @@ function triggerSpin() {
                 let winAmount = 500;
                 if (results[0] === '💎') winAmount = 1000;
                 balance += winAmount;
-                msg.textContent = `ДЖЕКПОТ! +₸${winAmount}`;
+                msg.textContent = lang.jackpot(winAmount);
                 msg.style.color = "#00ffcc";
                 playSound('jack');
                 createCoinExplosion();
             }
         } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
             balance += 200;
-            msg.textContent = "ПОБЕДА! +₸200";
+            msg.textContent = lang.win;
             msg.style.color = "#ffcc00";
             playSound('win');
             createCoinExplosion();
         } else {
-            msg.textContent = "ПРОИГРАЛ? ПОПРОБУЙ ЕЩЕ РАЗОК!";
+            msg.textContent = lang.loseSlot;
             msg.style.color = "#ff007f";
             playSound('lose');
         }
@@ -404,7 +570,7 @@ function drawDvdStatic() {
     ctx.font = '10px "Press Start 2P"';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('РУЛЕТКА', dvd.x + dvd.width/2, dvd.y + dvd.height/2);
+    ctx.fillText(i18nData[currentLang].rouletteCanvasText, dvd.x + dvd.width/2, dvd.y + dvd.height/2);
 }
 
 function updateDvdPhysics() {
@@ -427,14 +593,15 @@ function rouletteLoop() {
 }
 
 rouletteBtn.addEventListener('click', () => {
+    const lang = i18nData[currentLang];
     if (!rouletteActive) {
         if (balance < 100) { checkBankruptStatus(); return; }
         balance -= 100;
         updateBalanceDisplay();
         rouletteActive = true;
-        rouletteBtn.textContent = 'ПРЫГ-НЕ-СКОК!';
+        rouletteBtn.textContent = lang.rouletteBtnActive;
         rouletteBtn.style.backgroundColor = '#ff0055';
-        rouletteMsg.textContent = 'ПРЫГ-СКОК... ОСТАНОВИ ЕГО В ЗОНЕ!';
+        rouletteMsg.textContent = lang.rouletteMsgActive;
         rouletteMsg.style.color = '#fff';
         dvd.dx = (Math.random() > 0.5 ? 4 : -4);
         dvd.dy = (Math.random() > 0.5 ? 4 : -4);
@@ -445,9 +612,10 @@ rouletteBtn.addEventListener('click', () => {
 });
 
 function stopRouletteGame(shouldCalculateReward) {
+    const lang = i18nData[currentLang];
     rouletteActive = false;
     cancelAnimationFrame(dvdAnimationId);
-    rouletteBtn.textContent = 'НАЧАТЬ ИГРУ (₸100)';
+    rouletteBtn.textContent = lang.startRoulette;
     rouletteBtn.style.backgroundColor = '#3b2363';
     if (!shouldCalculateReward) return;
     let logoCenterX = dvd.x + dvd.width / 2;
@@ -456,17 +624,17 @@ function stopRouletteGame(shouldCalculateReward) {
         let winPrize = 120;
         if (Math.abs(logoCenterX - 225) < 30 && Math.abs(logoCenterY - 150) < 20) {
             winPrize = 200;
-            rouletteMsg.textContent = `ДА ТЫ СНАЙПЕР, ТОЧНО В ЦЕЛЬ! +₸${winPrize}`;
+            rouletteMsg.textContent = lang.rouletteSniper(winPrize);
             rouletteMsg.style.color = '#00ffcc';
         } else {
-            rouletteMsg.textContent = `НЕПЛОХО! +₸${winPrize}`;
+            rouletteMsg.textContent = lang.rouletteGood(winPrize);
             rouletteMsg.style.color = '#ffff00';
         }
         balance += winPrize;
         playSound('win');
         createCoinExplosion();
     } else {
-        rouletteMsg.textContent = 'НЕ ПОПАЛ... ДАВАЙ ЕЩЕ!';
+        rouletteMsg.textContent = lang.rouletteMiss;
         rouletteMsg.style.color = '#ff0055';
         playSound('lose');
     }
@@ -509,29 +677,30 @@ function createCoinExplosion() {
 
 const buyButtons = document.querySelectorAll('.shop-btn');
 function renderShop() {
+    const lang = i18nData[currentLang];
     buyButtons.forEach(btn => {
         const skinName = btn.id.replace('btn-skin-', '');
         const card = document.getElementById(`card-${skinName}`);
         if (!card) return;
         card.classList.remove('current');
         if (skinName === 'void' && !purchasedSkins.includes('void')) {
-            btn.textContent = 'ТОЛЬКО ПО ПРОМОКОДУ';
+            btn.textContent = lang.codeOnly;
             btn.className = 'shop-btn';
             btn.disabled = true;
             return;
         }
         if (currentSkin === skinName) {
             card.classList.add('current');
-            btn.textContent = 'ЭКИПИРОВАНО';
+            btn.textContent = lang.equipped;
             btn.className = 'shop-btn equipped';
             btn.disabled = true;
         } else if (purchasedSkins.includes(skinName)) {
-            btn.textContent = 'EQUIP';
+            btn.textContent = lang.equip;
             btn.className = 'shop-btn';
             btn.disabled = false;
         } else {
             const price = parseInt(btn.getAttribute('data-price'));
-            btn.textContent = `КУПИТЬ ЗА ₸${price}`;
+            btn.textContent = `${lang.buyFor}${price}`;
             btn.className = 'shop-btn btn-buy';
             btn.disabled = balance < price;
         } 
@@ -598,9 +767,8 @@ window.adminResetStorage = function() {
 };
 
 if (isAdminActivated) { buildAdminButton(); }
+switchLanguage(currentLang);
 setupTabNavigation();
 updateBalanceDisplay();
 applySkin();
-renderShop();
 checkBankruptStatus();
-drawDvdStatic();

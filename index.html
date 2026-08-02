@@ -16,9 +16,9 @@
 
     <div class="game-over-overlay" id="game-over-screen">
         <div class="game-over-box">
-            <div class="game-over-title">ПОРАЖЕНИЕ</div>
-            <p class="game-over-msg">ВЫ ОБАНКРОТИЛИСЬ И ПОТЕРЯЛИ ВСЕ!</p>
-            <button class="retry-btn" onclick="resetGameFromGameOver()">СБРОС</button>
+            <div class="game-over-title" data-i18n="defeat">ПОРАЖЕНИЕ</div>
+            <p class="game-over-msg" data-i18n="bankruptMsg">ВЫ ОБАНКРОТИЛИСЬ И ПОТЕРЯЛИ ВСЕ!</p>
+            <button class="retry-btn" onclick="resetGameFromGameOver()" data-i18n="reset">СБРОС</button>
         </div>
     </div>
 
@@ -26,20 +26,26 @@
         
         <!-- Sidebar -->
         <aside class="sidebar">
-            <div class="sidebar-title">РЕТРО КАЗИНО</div>
+            <div class="sidebar-title" data-i18n="retroCasino">РЕТРО КАЗИНО</div>
             
+            <!-- Language Selector -->
+            <div class="lang-switch">
+                <button class="lang-btn active" id="lang-ru" onclick="switchLanguage('ru')">RU</button>
+                <button class="lang-btn" id="lang-en" onclick="switchLanguage('en')">EN</button>
+            </div>
+
             <!-- Coin counter -->
             <div class="sidebar-balance">
-                <div class="balance-label">ТОКЕНЫ</div>
+                <div class="balance-label" data-i18n="tokens">ТОКЕНЫ</div>
                 <div class="balance-value">₸<span class="sync-balance">1000</span></div>
             </div>
 
             <nav class="sidebar-menu" id="sidebar-menu">
-                <button class="nav-btn active" data-tab="tab-home">🏠 ГЛАВНАЯ</button>
-                <button class="nav-btn" data-tab="tab-slots">🎰 СЛОТЫ</button>
-                <button class="nav-btn" data-tab="tab-roulette">🎯 РУЛЕТКА</button>
-                <button class="nav-btn" data-tab="tab-shop">🛒 МАГАЗИН</button>
-                <button class="nav-btn" data-tab="tab-promo">🎫 ПРОМОКОДЫ</button>
+                <button class="nav-btn active" data-tab="tab-home" data-i18n="navHome">🏠 ГЛАВНАЯ</button>
+                <button class="nav-btn" data-tab="tab-slots" data-i18n="navSlots">🎰 СЛОТЫ</button>
+                <button class="nav-btn" data-tab="tab-roulette" data-i18n="navRoulette">🎯 РУЛЕТКА</button>
+                <button class="nav-btn" data-tab="tab-shop" data-i18n="navShop">🛒 МАГАЗИН</button>
+                <button class="nav-btn" data-tab="tab-promo" data-i18n="navPromo">🎫 ПРОМОКОДЫ</button>
             </nav>
             <div class="sidebar-footer">v4.0</div>
         </aside>
@@ -50,19 +56,19 @@
             <!-- Tab 1: Home -->
             <section id="tab-home" class="tab-section active-tab">
                 <div class="lobby-container">
-                    <h1 class="lobby-title">ДОБРО ПОЖАЛОВАТЬ В РЕТРО КАЗИНО!</h1>
-                    <p class="lobby-subtitle">ВЫБЕРИ ИГРУ НА БОКОВОЙ ПАНЕЛИ, ЧТОБЫ НАЧАТЬ</p>
+                    <h1 class="lobby-title" data-i18n="welcome">ДОБРО ПОЖАЛОВАТЬ В РЕТРО КАЗИНО!</h1>
+                    <p class="lobby-subtitle" data-i18n="welcomeSub">ВЫБЕРИ ИГРУ НА БОКОВОЙ ПАНЕЛИ, ЧТОБЫ НАЧАТЬ</p>
                     
                     <div class="stats-card">
-                        <div class="stats-header">СТАТИСТИКА ИГРОКА</div>
-                        <p>СТАТУС: ВИП КЛИЕНТ</p>
+                        <div class="stats-header" data-i18n="playerStats">СТАТИСТИКА ИГРОКА</div>
+                        <p data-i18n="vipStatus">СТАТУС: ВИП КЛИЕНТ</p>
                     </div>
 
                     <div class="rules-box">
-                        <div class="rules-header">ИНФОРМАЦИЯ</div>
-                        <p>Каждая прокрутка в слотах и рулетке стоит ₸100.</p>
-                        <p>Загляни в МАГАЗИН, чтобы кастомизировать автомат!</p>
-                        <p>Есть секретный код? Введи его во вкладке ПРОМОКОДЫ!</p>
+                        <div class="rules-header" data-i18n="infoTitle">ИНФОРМАЦИЯ</div>
+                        <p data-i18n="ruleCost">Каждая прокрутка в слотах и рулетке стоит ₸100.</p>
+                        <p data-i18n="ruleShop">Загляни в МАГАЗИН, чтобы кастомизировать автомат!</p>
+                        <p data-i18n="rulePromo">Есть секретный код? Введи его во вкладке ПРОМОКОДЫ!</p>
                     </div>
                 </div>
             </section>
@@ -72,13 +78,13 @@
                 <div class="casino-container">
                     <div class="slot-machine-wrapper">
                         <div class="slot-machine" id="machine-body">
-                            <div class="machine-header">ПИКСЛОТЫ</div>
+                            <div class="machine-header" data-i18n="pixslots">ПИКСЛОТЫ</div>
                             <div class="screen">
                                 <div class="reel" id="reel1">💎</div>
                                 <div class="reel" id="reel2">💎</div>
                                 <div class="reel" id="reel3">💎</div>
                             </div>
-                            <div class="machine-footer">ДЁРНИ РЫЧАГ</div>
+                            <div class="machine-footer" data-i18n="pullLever">ДЁРНИ РЫЧАГ</div>
                         </div>
 
                         <div class="lever-container" id="lever-container">
@@ -90,7 +96,7 @@
                     </div>
                     
                     <div class="message-box">
-                        <div class="message" id="msg">ПРОВЕРИМ ТВОЮ УДАЧУ</div>
+                        <div class="message" id="msg" data-i18n="msgLuck">ПРОВЕРИМ ТВОЮ УДАЧУ</div>
                     </div>
                 </div>
             </section>
@@ -98,16 +104,16 @@
             <!-- Tab 3: Roulette -->
             <section id="tab-roulette" class="tab-section">
                 <div class="roulette-container">
-                    <h2 class="roulette-title">DVD РУЛЕТКА</h2>
+                    <h2 class="roulette-title" data-i18n="dvdTitle">DVD РУЛЕТКА</h2>
                     <div class="roulette-screen-wrapper">
                         <canvas id="roulette-canvas" width="450" height="300"></canvas>
-                        <div class="roulette-target-zone">ЗОНА ДЖЕКПОТА</div>
+                        <div class="roulette-target-zone" data-i18n="jackpotZone">ЗОНА ДЖЕКПОТА</div>
                     </div>
                     
-                    <button class="roulette-action-btn" id="roulette-btn">НАЧАТЬ ИГРУ (₸100)</button>
+                    <button class="roulette-action-btn" id="roulette-btn" data-i18n="startRoulette">НАЧАТЬ ИГРУ (₸100)</button>
                     
                     <div class="message-box" style="transform: none; margin-top: 15px;">
-                        <div class="message" id="roulette-msg">НАЖМИ СТАРТ И ПОЙМАЙ РУЛЕТКУ!</div>
+                        <div class="message" id="roulette-msg" data-i18n="rouletteMsgStart">НАЖМИ СТАРТ И ПОЙМАЙ РУЛЕТКУ!</div>
                     </div>
                 </div>
             </section>
@@ -115,8 +121,8 @@
             <!-- Tab 4: Shop -->
             <section id="tab-shop" class="tab-section">
                 <div class="shop-container">
-                    <h2 class="shop-title">СКИНЫ СЛОТОВ</h2>
-                    <p class="shop-subtitle">ВЫБЕРИТЕ СТИЛЬ ДЛЯ ВАШЕГО АВТОМАТА</p>
+                    <h2 class="shop-title" data-i18n="shopTitle">СКИНЫ СЛОТОВ</h2>
+                    <p class="shop-subtitle" data-i18n="shopSub">ВЫБЕРИТЕ СТИЛЬ ДЛЯ ВАШЕГО АВТОМАТА</p>
                     
                     <div class="shop-grid">
                         <div class="shop-card current" id="card-default">
@@ -173,26 +179,26 @@
             <!-- Tab 5: Codes -->
             <section id="tab-promo" class="tab-section">
                 <div class="promo-container">
-                    <h2 class="promo-title">ВВОД ПРОМОКОДОВ</h2>
-                    <p class="promo-subtitle">ВВОДИ СЕКРЕТНЫЕ КОДЫ ДЛЯ РАЗБЛОКИРОВКИ БОНУСОВ</p>
+                    <h2 class="promo-title" data-i18n="promoTitle">ВВОД ПРОМОКОДОВ</h2>
+                    <p class="promo-subtitle" data-i18n="promoSub">ВВОДИ СЕКРЕТНЫЕ КОДЫ ДЛЯ РАЗБЛОКИРОВКИ БОНУСОВ</p>
                     
                     <div class="promo-box">
-                        <input type="text" id="promo-input" placeholder="ВВЕДИТЕ ПРОМОКОД..." autocomplete="off">
-                        <button id="promo-submit-btn" onclick="submitPromoCode()">АКТИВИРОВАТЬ</button>
+                        <input type="text" id="promo-input" placeholder="ВВЕДИТЕ ПРОМОКОД..." data-i18n-placeholder="promoPlaceholder" autocomplete="off">
+                        <button id="promo-submit-btn" onclick="submitPromoCode()" data-i18n="promoActivate">АКТИВИРОВАТЬ</button>
                     </div>
                     
-                    <div class="promo-msg" id="promo-msg">ОЖИДАНИЕ ВВОДА...</div>
+                    <div class="promo-msg" id="promo-msg" data-i18n="promoWait">ОЖИДАНИЕ ВВОДА...</div>
                 </div>
             </section>
 
             <!-- Tab 6: Admin -->
             <section id="tab-admin" class="tab-section">
                 <div class="admin-panel-container">
-                    <h2 class="admin-title">⚡ СЕКРЕТНАЯ ПАНЕЛЬКА ⚡</h2>
-                    <p class="admin-subtitle">УПРАВЛЕНИЕ РЕСУРСАМИ И СОСТОЯНИЕМ ИГРЫ</p>
+                    <h2 class="admin-title" data-i18n="adminTitle">⚡ СЕКРЕТНАЯ ПАНЕЛЬКА ⚡</h2>
+                    <p class="admin-subtitle" data-i18n="adminSub">УПРАВЛЕНИЕ РЕСУРСАМИ И СОСТОЯНИЕМ ИГРЫ</p>
                     
                     <div class="admin-card">
-                        <div class="admin-section-title">ВЫДАЧА ТОКЕНОВ</div>
+                        <div class="admin-section-title" data-i18n="adminGiveTokens">ВЫДАЧА ТОКЕНОВ</div>
                         <div class="admin-row">
                             <button onclick="adminGiveMoney(100)">+₸100</button>
                             <button onclick="adminGiveMoney(1000)">+₸1000</button>
@@ -202,9 +208,9 @@
                     </div>
 
                     <div class="admin-card">
-                        <div class="admin-section-title">КРУТЫЕ ФУНКЦИИ</div>
+                        <div class="admin-section-title" data-i18n="adminCoolFuncs">КРУТЫЕ ФУНКЦИИ</div>
                         <div class="admin-row">
-                            <button class="btn-danger" onclick="adminResetStorage()">СБРОС</button>
+                            <button class="btn-danger" onclick="adminResetStorage()" data-i18n="reset">СБРОС</button>
                         </div>
                     </div>
                 </div>
