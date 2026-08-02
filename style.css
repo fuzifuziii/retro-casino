@@ -1,5 +1,4 @@
-/* by fuzifuziii */
-/* Сброс стилей и шрифты */
+/* Style reset and fonts */
 * {
     box-sizing: border-box;
     font-family: 'Press Start 2P', monospace;
@@ -22,7 +21,7 @@ body {
     height: 100vh;
 }
 
-/* Боковая панель */
+/* Sidebar */
 .sidebar {
     width: 260px;
     background-color: #180d2c;
@@ -73,7 +72,7 @@ body {
     transform: translate(2px, 2px);
 }
 
-/* Кнопка админа в сайдбаре */
+/* Admin button in sidebar */
 .nav-btn.admin-nav-btn {
     background-color: #221122;
     color: #ff0055;
@@ -146,7 +145,7 @@ body {
     to { opacity: 1; transform: scale(1); }
 }
 
-/* Вкладка 1: Главная */
+/* Tab 1: Home */
 .lobby-container {
     text-align: center;
     max-width: 600px;
@@ -190,7 +189,7 @@ body {
     margin: 5px 0;
 }
 
-/* Стили для поражения */
+/* Game over styles */
 .game-over-overlay {
     display: none;
     position: absolute;
@@ -260,7 +259,7 @@ body {
     to { opacity: 0.6; }
 }
 
-/* Вкладка 5: промокоды */
+/* Tab 5: Codes */
 .promo-container {
     text-align: center;
     max-width: 500px;
@@ -352,7 +351,7 @@ body {
     animation: blinkEffect 0.3s infinite alternate;
 }
 
-/* Секретрная вкладка 6: Админ */
+/* Tab 6: Admin */
 .admin-panel-container {
     text-align: center;
     max-width: 600px;
@@ -423,7 +422,7 @@ body {
     box-shadow: inset -3px -3px 0 #990033;
 }
 
-/* Вкладка 2: Слоты */
+/* Tab 2: Slots */
 .casino-container {
     display: flex;
     flex-direction: column;
@@ -491,7 +490,7 @@ body {
     100% { transform: translateY(12px); }
 }
 
-/* Рычаг */
+/* Lever */
 .lever-container {
     width: 45px;
     height: 200px;
@@ -557,7 +556,7 @@ body {
     color: #ff007f;
 }
 
-/* Вкладка 3: Рулетка (Я не вру, правда любимое) */
+/* Tab 3: Roulette */
 .roulette-container {
     display: flex;
     flex-direction: column;
@@ -605,8 +604,7 @@ body {
 .roulette-action-btn:hover { background-color: #4c2f7e; }
 .roulette-action-btn:active { transform: translate(2px,2px); box-shadow: inset 2px 2px 0 #000; }
 
-/* Вкладка 4: Магазин */
-
+/* Tab 4: Shop */
 .slot-machine.theme-neon { background: #bc00dd; box-shadow: inset -8px -8px 0px #720087, inset 8px 8px 0px #f366ff, 10px 10px 0px rgba(0, 0, 0, 0.4); }
 .theme-neon .machine-header { color: #00ffcc; }
 .theme-neon .reel { background: #221333; color: #fff; border-color: #00ffcc; box-shadow: inset -4px -4px 0px #441155; }
@@ -697,7 +695,7 @@ body {
     box-shadow: inset -3px -3px 0 #00b38f !important;
 }
 
-/* Ретро эффекты */
+/* Retro effects */
 .pixel-coin { position: fixed; width: 12px; height: 12px; background-color: #ffcc00; border: 2px solid #000; box-shadow: inset -3px -3px 0px #bb9900; z-index: 100; pointer-events: none; }
 .crt-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, transparent 55%, rgba(0, 0, 0, 0.4) 100%); pointer-events: none; z-index: 10; }
 .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px; pointer-events: none; z-index: 11; }

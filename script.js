@@ -1,11 +1,10 @@
-// by fuzifuziii
-// Состояние слотов
+// Slot state
 const symbols = ['💎', '🍒', '🪙', '💀', '🍀'];
 let balance = 1000;
 let isSpinning = false;
 let isAdminActivated = false; 
 
-// Состояние скинов
+// Skins state
 let currentSkin = localStorage.getItem('currentSkin') || 'default';
 let purchasedSkins = JSON.parse(localStorage.getItem('purchasedSkins')) || ['default'];
 
@@ -17,13 +16,13 @@ if (sessionStorage.getItem('adminPanelUnlocked') === 'true') {
     isAdminActivated = true;
 }
 
-// Элементы навигации
+// Navigation elements
 let navButtons = document.querySelectorAll('.nav-btn');
 const tabSections = document.querySelectorAll('.tab-section');
 const syncBalanceElements = document.querySelectorAll('.sync-balance');
 const gameOverScreen = document.getElementById('game-over-screen');
 
-// Игровые элементы слотов
+// Slot game elements
 const machineBody = document.getElementById('machine-body');
 const msg = document.getElementById('msg');
 const reels = [
@@ -38,7 +37,7 @@ let isDragging = false;
 let startY = 0;
 const maxPull = 100;
 
-// Состояние рулетки
+// Roulette state
 const canvas = document.getElementById('roulette-canvas');
 const ctx = canvas.getContext('2d');
 const rouletteBtn = document.getElementById('roulette-btn');
@@ -47,7 +46,7 @@ const rouletteMsg = document.getElementById('roulette-msg');
 let rouletteActive = false;
 let dvdAnimationId = null;
 
-// Настройка логотипа рулетки
+// Roulette DVD logo
 let dvd = {
     x: 50,
     y: 50,
@@ -59,7 +58,7 @@ let dvd = {
     currentColorIndex: 0
 };
 
-// 8-битный звук
+// 8-bit sounds
 function playSound(type) {
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = audioCtx.createOscillator();
@@ -138,7 +137,7 @@ function playSound(type) {
     }
 }
 
-// Клик по вкладкам
+// Tab click
 function setupTabNavigation() {
     navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(button => {
@@ -211,7 +210,7 @@ window.resetGameFromGameOver = function() {
     playSound('win');
 };
 
-// Логика промокодов
+// Codes logic
 window.submitPromoCode = function() {
     const input = document.getElementById('promo-input');
     const promoMsg = document.getElementById('promo-msg');
@@ -285,7 +284,7 @@ function buildAdminButton() {
     setupTabNavigation();
 }
 
-// Логика рычага и слотов
+// Lever drag and slot machine spin logic
 knob.addEventListener('mousedown', (e) => {
     if (isSpinning) return;
     if (balance < 100) {
@@ -348,7 +347,7 @@ function triggerSpin() {
             results.push(randomSymbol);
         });
 
-        // Логика с черепами
+        // Skull logic
         const skullCount = results.filter(symbol => symbol === '💀').length;
 
         if (skullCount > 0) {
@@ -392,7 +391,7 @@ function triggerSpin() {
     }, 1500);
 }
 
-// Логика движка рулетки
+// Roulette engine logic
 function drawDvdStatic() {
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
