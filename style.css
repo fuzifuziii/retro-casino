@@ -435,8 +435,7 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding-right: 50px; 
-    padding-left: 35px;
+    padding: 0 45px;
     margin: 0 auto;
     box-sizing: border-box;
 }
@@ -445,7 +444,6 @@ body {
     .slot-machine-wrapper {
         transform: scale(0.85);
         transform-origin: center center;
-        /* Компактный паддинг под рычаг */
         padding-right: 40px; 
         margin: 0 auto;
     }
@@ -574,7 +572,6 @@ body {
     padding: 12px 24px;
     min-width: 320px;
     text-align: center;
-    transform: translateX(-30px); 
 }
 
 .message {

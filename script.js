@@ -203,7 +203,7 @@ let rouletteActive = false;
 let dvdAnimationId = null;
 
 let lastTime = 0;
-const DVD_SPEED = 300; 
+const DVD_SPEED = 1000; 
 
 let dvd = {
     x: 50,
@@ -217,44 +217,61 @@ let dvd = {
 };
 
 // Audio Handler
+let globalAudioCtx = null;
+
+function getAudioContext() {
+    if (!globalAudioCtx) {
+        const AudioCtxClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtxClass) {
+            globalAudioCtx = new AudioCtxClass();
+        }
+    }
+    
+    if (globalAudioCtx && globalAudioCtx.state === 'suspended') {
+        globalAudioCtx.resume();
+    }
+    
+    return globalAudioCtx;
+}
+
 function playSound(type) {
     try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        const audioCtx = new AudioContext();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
+        const ctx = getAudioContext();
+        if (!ctx) return;
+
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
+        gain.connect(ctx.destination);
 
         if (type === 'click') {
             osc.type = 'triangle';
-            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.05);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.05);
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.exponentialRampToValueAtTime(10, now + 0.05);
+            gain.gain.setValueAtTime(0.1, now);
+            osc.start(now);
+            osc.stop(now + 0.05);
         } else if (type === 'win') {
             osc.type = 'square';
-            const now = audioCtx.currentTime;
             osc.frequency.setValueAtTime(300, now);
             osc.frequency.setValueAtTime(400, now + 0.08);
             osc.frequency.setValueAtTime(500, now + 0.16);
             osc.frequency.setValueAtTime(600, now + 0.24);
             gain.gain.setValueAtTime(0.05, now);
             gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-            osc.start();
+            osc.start(now);
             osc.stop(now + 0.4);
         } else if (type === 'lose') {
             osc.type = 'sawtooth';
-            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-            osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.25);
-            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.25);
+            osc.frequency.setValueAtTime(120, now);
+            osc.frequency.linearRampToValueAtTime(40, now + 0.25);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+            osc.start(now);
+            osc.stop(now + 0.25);
         } else if (type === 'gameover') {
-            const now = audioCtx.currentTime;
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(180, now);
             osc.frequency.setValueAtTime(140, now + 0.15);
@@ -262,10 +279,9 @@ function playSound(type) {
             osc.frequency.linearRampToValueAtTime(30, now + 0.6);
             gain.gain.setValueAtTime(0.15, now);
             gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
-            osc.start();
+            osc.start(now);
             osc.stop(now + 0.6);
         } else if (type === 'jack') {
-            const now = audioCtx.currentTime;
             osc.type = 'sine';
             osc.frequency.setValueAtTime(200, now);
             osc.frequency.exponentialRampToValueAtTime(800, now + 0.4);
@@ -274,10 +290,10 @@ function playSound(type) {
             osc.start(now);
             osc.stop(now + 0.9);
 
-            const osc2 = audioCtx.createOscillator();
-            const gain2 = audioCtx.createGain();
+            const osc2 = ctx.createOscillator();
+            const gain2 = ctx.createGain();
             osc2.connect(gain2);
-            gain2.connect(audioCtx.destination);
+            gain2.connect(ctx.destination);
             osc2.type = 'square';
             const notes = [600, 800, 1000, 1200, 1000, 1400];
             notes.forEach((f, i) => {
@@ -289,7 +305,6 @@ function playSound(type) {
             osc2.stop(now + 0.7);
         }
     } catch (e) {
-        // Prevent audio errors on locked devices
     }
 }
 
