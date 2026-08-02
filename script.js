@@ -561,16 +561,28 @@ function triggerSpin() {
 function drawDvdStatic() {
     ctx.fillStyle = '#111';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-    ctx.lineWidth = 4;
+
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0, 255, 204, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 6]); // Пунктир
     ctx.strokeRect(100, 75, 250, 150);
+
+    ctx.fillStyle = 'rgba(0, 255, 204, 0.25)';
+    ctx.font = '12px "Press Start 2P"';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(i18nData[currentLang].jackpotZone || "JACKPOT ZONE", 225, 150);
+    ctx.restore();
+
     ctx.fillStyle = dvd.colors[dvd.currentColorIndex];
     ctx.fillRect(dvd.x, dvd.y, dvd.width, dvd.height);
+    
     ctx.fillStyle = '#000';
     ctx.font = '10px "Press Start 2P"';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(i18nData[currentLang].rouletteCanvasText, dvd.x + dvd.width/2, dvd.y + dvd.height/2);
+    ctx.fillText(i18nData[currentLang].rouletteCanvasText, dvd.x + dvd.width / 2, dvd.y + dvd.height / 2);
 }
 
 function updateDvdPhysics() {
