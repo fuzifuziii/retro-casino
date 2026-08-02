@@ -44,7 +44,6 @@ const i18nData = {
         adminSub: "УПРАВЛЕНИЕ РЕСУРСАМИ И СОСТОЯНИЕМ ИГРЫ",
         adminGiveTokens: "ВЫДАЧА ТОКЕНОВ",
         adminCoolFuncs: "КРУТЫЕ ФУНКЦИИ",
-        // Dynamic game messages
         tryAgainNextTime: "ПОПРОБУЙ УДАЧУ В СЛЕДУЮЩИЙ РАЗ!",
         emptyCode: "ПУСТО!",
         voidUnlocked: "СКИН COSMIC VOID РАЗБЛОКИРОВАН!",
@@ -107,7 +106,6 @@ const i18nData = {
         adminSub: "MANAGE GAME RESOURCES AND STATE",
         adminGiveTokens: "GIVE TOKENS",
         adminCoolFuncs: "COOL FEATURES",
-        // Dynamic game messages
         tryAgainNextTime: "TRY YOUR LUCK NEXT TIME!",
         emptyCode: "EMPTY!",
         voidUnlocked: "COSMIC VOID SKIN UNLOCKED!",
@@ -138,36 +136,32 @@ function switchLanguage(lang) {
     const activeLangBtn = document.getElementById(`lang-${lang}`);
     if (activeLangBtn) activeLangBtn.classList.add('active');
 
-    // Translate elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (i18nData[lang][key]) {
+        if (i18nData[lang] && i18nData[lang][key]) {
             el.textContent = i18nData[lang][key];
         }
     });
 
-    // Translate placeholders
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
-        if (i18nData[lang][key]) {
+        if (i18nData[lang] && i18nData[lang][key]) {
             el.placeholder = i18nData[lang][key];
         }
     });
 
-    // Refresh dynamic texts
     renderShop();
     if (!rouletteActive) {
         drawDvdStatic();
     }
 }
 
-// Slot state
+// State variables
 const symbols = ['💎', '🍒', '🪙', '💀', '🍀'];
 let balance = 1000;
 let isSpinning = false;
 let isAdminActivated = false; 
 
-// Skins state
 let currentSkin = localStorage.getItem('currentSkin') || 'default';
 let purchasedSkins = JSON.parse(localStorage.getItem('purchasedSkins')) || ['default'];
 
@@ -179,13 +173,12 @@ if (sessionStorage.getItem('adminPanelUnlocked') === 'true') {
     isAdminActivated = true;
 }
 
-// Navigation elements
+// Global DOM elements
 let navButtons = document.querySelectorAll('.nav-btn');
 const tabSections = document.querySelectorAll('.tab-section');
 const syncBalanceElements = document.querySelectorAll('.sync-balance');
 const gameOverScreen = document.getElementById('game-over-screen');
 
-// Slot game elements
 const machineBody = document.getElementById('machine-body');
 const msg = document.getElementById('msg');
 const reels = [
@@ -202,105 +195,105 @@ const maxPull = 100;
 
 // Roulette state
 const canvas = document.getElementById('roulette-canvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas ? canvas.getContext('2d') : null;
 const rouletteBtn = document.getElementById('roulette-btn');
 const rouletteMsg = document.getElementById('roulette-msg');
 
 let rouletteActive = false;
 let dvdAnimationId = null;
 
-// Roulette DVD logo
+let lastTime = 0;
+const DVD_SPEED = 300; 
+
 let dvd = {
     x: 50,
     y: 50,
     width: 110,
     height: 40,
-    dx: 6,
-    dy: 6,
+    dirX: 1, 
+    dirY: 1, 
     colors: ['#ff007f', '#00ffcc', '#ffff00', '#ff0055', '#38bdf8', '#a7f3d0'],
     currentColorIndex: 0
 };
 
-// 8-bit sounds
+// Audio Handler
 function playSound(type) {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const audioCtx = new AudioContext();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
 
-    if (type === 'click') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.05);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.05);
-    } else if (type === 'win') {
-        osc.type = 'square';
-        const now = audioCtx.currentTime;
-        osc.frequency.setValueAtTime(300, now);
-        osc.frequency.setValueAtTime(400, now + 0.08);
-        osc.frequency.setValueAtTime(500, now + 0.16);
-        osc.frequency.setValueAtTime(600, now + 0.24);
-        gain.gain.setValueAtTime(0.05, now);
-        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-        osc.start();
-        osc.stop(now + 0.4);
-    } else if (type === 'lose') {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-        osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.25);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.25);
-    } else if (type === 'gameover') {
-        const now = audioCtx.currentTime;
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(180, now);
-        osc.frequency.setValueAtTime(140, now + 0.15);
-        osc.frequency.setValueAtTime(100, now + 0.3);
-        osc.frequency.linearRampToValueAtTime(30, now + 0.6);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
-        osc.start();
-        osc.stop(now + 0.6);
-    } else if (type === 'jack') {
-        const now = audioCtx.currentTime;
+        if (type === 'click') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        } else if (type === 'win') {
+            osc.type = 'square';
+            const now = audioCtx.currentTime;
+            osc.frequency.setValueAtTime(300, now);
+            osc.frequency.setValueAtTime(400, now + 0.08);
+            osc.frequency.setValueAtTime(500, now + 0.16);
+            osc.frequency.setValueAtTime(600, now + 0.24);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+            osc.start();
+            osc.stop(now + 0.4);
+        } else if (type === 'lose') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.25);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.25);
+        } else if (type === 'gameover') {
+            const now = audioCtx.currentTime;
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(180, now);
+            osc.frequency.setValueAtTime(140, now + 0.15);
+            osc.frequency.setValueAtTime(100, now + 0.3);
+            osc.frequency.linearRampToValueAtTime(30, now + 0.6);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+            osc.start();
+            osc.stop(now + 0.6);
+        } else if (type === 'jack') {
+            const now = audioCtx.currentTime;
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(200, now);
+            osc.frequency.exponentialRampToValueAtTime(800, now + 0.4);
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.2, now + 0.15);
+            osc.start(now);
+            osc.stop(now + 0.9);
 
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(200, now);
-        osc.frequency.exponentialRampToValueAtTime(800, now + 0.4);
-
-        gain.gain.setValueAtTime(0.0001, now);
-        gain.gain.exponentialRampToValueAtTime(0.2, now + 0.15);
-
-        osc.start(now);
-        osc.stop(now + 0.9);
-
-        const osc2 = audioCtx.createOscillator();
-        const gain2 = audioCtx.createGain();
-
-        osc2.connect(gain2);
-        gain2.connect(audioCtx.destination);
-
-        osc2.type = 'square';
-
-        const notes = [600, 800, 1000, 1200, 1000, 1400];
-        notes.forEach((f, i) => {
-            osc2.frequency.setValueAtTime(f, now + i * 0.08);
-        });
-
-        gain2.gain.setValueAtTime(0.05, now);
-        gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
-
-        osc2.start(now);
-        osc2.stop(now + 0.7);
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            osc2.type = 'square';
+            const notes = [600, 800, 1000, 1200, 1000, 1400];
+            notes.forEach((f, i) => {
+                osc2.frequency.setValueAtTime(f, now + i * 0.08);
+            });
+            gain2.gain.setValueAtTime(0.05, now);
+            gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+            osc2.start(now);
+            osc2.stop(now + 0.7);
+        }
+    } catch (e) {
+        // Prevent audio errors on locked devices
     }
 }
 
-// Tab click
+// Navigation Logic
 function setupTabNavigation() {
     navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(button => {
@@ -318,8 +311,19 @@ function handleTabClick(e) {
 
     const targetTabId = clickedButton.getAttribute('data-tab');
     tabSections.forEach(section => section.classList.remove('active-tab'));
-    document.getElementById(targetTabId).classList.add('active-tab');
     
+    const targetSection = document.getElementById(targetTabId);
+    if (targetSection) {
+        targetSection.classList.add('active-tab');
+    }
+    
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (sidebar && sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        if (backdrop) backdrop.classList.remove('active');
+    }
+
     if (targetTabId === 'tab-shop') {
         renderShop();
     }
@@ -343,6 +347,7 @@ function updateBalanceDisplay() {
 }
 
 function checkBankruptStatus() {
+    if (!gameOverScreen) return;
     if (balance < 100 && !isSpinning && !rouletteActive) {
         gameOverScreen.classList.add('active-screen');
         playSound('gameover');
@@ -368,15 +373,18 @@ window.resetGameFromGameOver = function() {
     checkBankruptStatus();
     setupTabNavigation();
     
-    msg.textContent = i18nData[currentLang].tryAgainNextTime;
-    msg.style.color = "#ff007f";
+    if (msg) {
+        msg.textContent = i18nData[currentLang].tryAgainNextTime;
+        msg.style.color = "#ff007f";
+    }
     playSound('win');
 };
 
-// Codes logic
 window.submitPromoCode = function() {
     const input = document.getElementById('promo-input');
     const promoMsg = document.getElementById('promo-msg');
+    if (!input || !promoMsg) return;
+
     const code = input.value.trim().toLowerCase(); 
     const lang = i18nData[currentLang];
     
@@ -449,25 +457,23 @@ function buildAdminButton() {
     setupTabNavigation();
 }
 
-// Lever drag and slot machine spin logic
-knob.addEventListener('mousedown', (e) => {
+// Lever Controls
+function handleDragStart(clientY) {
     if (isSpinning) return;
     if (balance < 100) {
         checkBankruptStatus();
         return;
     }
-    
-    e.preventDefault(); 
     isDragging = true;
-    startY = e.clientY;
-    shaft.classList.remove('lever-returning');
+    startY = clientY;
+    if (shaft) shaft.classList.remove('lever-returning');
     playSound('click');
-});
+}
 
-window.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
+function handleDragMove(clientY) {
+    if (!isDragging || !shaft) return;
 
-    let deltaY = e.clientY - startY;
+    let deltaY = clientY - startY;
     if (deltaY < 0) deltaY = 0;
     if (deltaY > maxPull) deltaY = maxPull;
 
@@ -477,17 +483,14 @@ window.addEventListener('mousemove', (e) => {
     if (deltaY >= maxPull * 0.9) {
         triggerSpin();
     }
-});
-
-window.addEventListener('mouseup', () => {
-    if (!isDragging) return;
-    resetLever();
-});
+}
 
 function resetLever() {
     isDragging = false;
-    shaft.classList.add('lever-returning');
-    shaft.style.transform = `scaleY(1)`;
+    if (shaft) {
+        shaft.classList.add('lever-returning');
+        shaft.style.transform = `scaleY(1)`;
+    }
 }
 
 function triggerSpin() {
@@ -498,55 +501,57 @@ function triggerSpin() {
     const lang = i18nData[currentLang];
     balance -= 100;
     updateBalanceDisplay();
-    msg.textContent = lang.spinning;
-    msg.style.color = "#ffffff";
+    if (msg) {
+        msg.textContent = lang.spinning;
+        msg.style.color = "#ffffff";
+    }
 
-    reels.forEach(reel => reel.classList.add('spinning'));
+    reels.forEach(reel => reel && reel.classList.add('spinning'));
 
     setTimeout(() => {
         let results = [];
         
         reels.forEach(reel => {
+            if (!reel) return;
             reel.classList.remove('spinning');
             const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
             reel.textContent = randomSymbol;
             results.push(randomSymbol);
         });
 
-        // Skull logic
         const skullCount = results.filter(symbol => symbol === '💀').length;
 
         if (skullCount > 0) {
             const fine = skullCount * 50;
             balance = Math.max(0, balance - fine);
-            msg.textContent = lang.skullFine(skullCount, fine);
-            msg.style.color = "#ff0000";
+            if (msg) msg.textContent = lang.skullFine(skullCount, fine);
+            if (msg) msg.style.color = "#ff0000";
             playSound('lose');
         } else if (results[0] === results[1] && results[1] === results[2]) {
             if (!localStorage.getItem('promo_diov_found') && Math.random() < 0.1) {
                 localStorage.setItem('promo_diov_found', 'true');
-                msg.textContent = lang.secretPromoFound;
-                msg.style.color = "#ffff00";
+                if (msg) msg.textContent = lang.secretPromoFound;
+                if (msg) msg.style.color = "#ffff00";
                 playSound('jack');
                 createCoinExplosion();
             } else {
                 let winAmount = 500;
                 if (results[0] === '💎') winAmount = 1000;
                 balance += winAmount;
-                msg.textContent = lang.jackpot(winAmount);
-                msg.style.color = "#00ffcc";
+                if (msg) msg.textContent = lang.jackpot(winAmount);
+                if (msg) msg.style.color = "#00ffcc";
                 playSound('jack');
                 createCoinExplosion();
             }
         } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
             balance += 200;
-            msg.textContent = lang.win;
-            msg.style.color = "#ffcc00";
+            if (msg) msg.textContent = lang.win;
+            if (msg) msg.style.color = "#ffcc00";
             playSound('win');
             createCoinExplosion();
         } else {
-            msg.textContent = lang.loseSlot;
-            msg.style.color = "#ff007f";
+            if (msg) msg.textContent = lang.loseSlot;
+            if (msg) msg.style.color = "#ff007f";
             playSound('lose');
         }
 
@@ -557,8 +562,29 @@ function triggerSpin() {
     }, 1500);
 }
 
-// Roulette engine logic
+if (knob) {
+    knob.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        handleDragStart(e.clientY);
+    });
+
+    knob.addEventListener('touchstart', (e) => {
+        handleDragStart(e.touches[0].clientY);
+    }, { passive: true });
+}
+
+window.addEventListener('mousemove', (e) => { handleDragMove(e.clientY); });
+window.addEventListener('mouseup', () => { if (isDragging) resetLever(); });
+
+window.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    handleDragMove(e.touches[0].clientY);
+}, { passive: true });
+window.addEventListener('touchend', () => { if (isDragging) resetLever(); });
+
+// Roulette Physics
 function drawDvdStatic() {
+    if (!ctx || !canvas) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.fillStyle = '#111';
@@ -587,69 +613,115 @@ function drawDvdStatic() {
     ctx.fillText(i18nData[currentLang].rouletteCanvasText, dvd.x + dvd.width / 2, dvd.y + dvd.height / 2);
 }
 
-function updateDvdPhysics() {
-    dvd.x += dvd.dx;
-    dvd.y += dvd.dy;
+function updateDvdPhysics(dt) {
+    if (!canvas) return;
+    dvd.x += dvd.dirX * DVD_SPEED * dt;
+    dvd.y += dvd.dirY * DVD_SPEED * dt;
+
     let hitWall = false;
-    if (dvd.x <= 0 || dvd.x + dvd.width >= canvas.width) { dvd.dx = -dvd.dx; hitWall = true; }
-    if (dvd.y <= 0 || dvd.y + dvd.height >= canvas.height) { dvd.dy = -dvd.dy; hitWall = true; }
+
+    if (dvd.x <= 0) {
+        dvd.x = 0;
+        dvd.dirX = 1;
+        hitWall = true;
+    } else if (dvd.x + dvd.width >= canvas.width) {
+        dvd.x = canvas.width - dvd.width;
+        dvd.dirX = -1;
+        hitWall = true;
+    }
+
+    if (dvd.y <= 0) {
+        dvd.y = 0;
+        dvd.dirY = 1;
+        hitWall = true;
+    } else if (dvd.y + dvd.height >= canvas.height) {
+        dvd.y = canvas.height - dvd.height;
+        dvd.dirY = -1;
+        hitWall = true;
+    }
+
     if (hitWall) {
         dvd.currentColorIndex = (dvd.currentColorIndex + 1) % dvd.colors.length;
         playSound('click');
     }
 }
 
-function rouletteLoop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    updateDvdPhysics();
+function rouletteLoop(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    let dt = (timestamp - lastTime) / 1000;
+    if (dt > 0.1) dt = 0.1;
+    lastTime = timestamp;
+
+    updateDvdPhysics(dt);
     drawDvdStatic();
-    dvdAnimationId = requestAnimationFrame(rouletteLoop);
+
+    if (rouletteActive) {
+        dvdAnimationId = requestAnimationFrame(rouletteLoop);
+    }
 }
 
-rouletteBtn.addEventListener('click', () => {
-    const lang = i18nData[currentLang];
-    if (!rouletteActive) {
-        if (balance < 100) { checkBankruptStatus(); return; }
-        balance -= 100;
-        updateBalanceDisplay();
-        rouletteActive = true;
-        rouletteBtn.textContent = lang.rouletteBtnActive;
-        rouletteBtn.style.backgroundColor = '#ff0055';
-        rouletteMsg.textContent = lang.rouletteMsgActive;
-        rouletteMsg.style.color = '#fff';
-        dvd.dx = (Math.random() > 0.5 ? 4 : -4);
-        dvd.dy = (Math.random() > 0.5 ? 4 : -4);
-        rouletteLoop();
-    } else {
-        stopRouletteGame(true);
-    }
-});
+if (rouletteBtn) {
+    rouletteBtn.addEventListener('click', () => {
+        const lang = i18nData[currentLang];
+        if (!rouletteActive) {
+            if (balance < 100) { checkBankruptStatus(); return; }
+            balance -= 100;
+            updateBalanceDisplay();
+            
+            rouletteActive = true;
+            lastTime = 0;
+            
+            rouletteBtn.textContent = lang.rouletteBtnActive;
+            rouletteBtn.style.backgroundColor = '#ff0055';
+            if (rouletteMsg) {
+                rouletteMsg.textContent = lang.rouletteMsgActive;
+                rouletteMsg.style.color = '#fff';
+            }
+            
+            dvd.dirX = Math.random() > 0.5 ? 1 : -1;
+            dvd.dirY = Math.random() > 0.5 ? 1 : -1;
+
+            dvdAnimationId = requestAnimationFrame(rouletteLoop);
+        } else {
+            stopRouletteGame(true);
+        }
+    });
+}
 
 function stopRouletteGame(shouldCalculateReward) {
     const lang = i18nData[currentLang];
     rouletteActive = false;
     cancelAnimationFrame(dvdAnimationId);
-    rouletteBtn.textContent = lang.startRoulette;
-    rouletteBtn.style.backgroundColor = '#3b2363';
+    if (rouletteBtn) {
+        rouletteBtn.textContent = lang.startRoulette;
+        rouletteBtn.style.backgroundColor = '#3b2363';
+    }
     if (!shouldCalculateReward) return;
+
     let logoCenterX = dvd.x + dvd.width / 2;
     let logoCenterY = dvd.y + dvd.height / 2;
     if (logoCenterX >= 100 && logoCenterX <= 350 && logoCenterY >= 75 && logoCenterY <= 225) {
         let winPrize = 120;
         if (Math.abs(logoCenterX - 225) < 30 && Math.abs(logoCenterY - 150) < 20) {
             winPrize = 200;
-            rouletteMsg.textContent = lang.rouletteSniper(winPrize);
-            rouletteMsg.style.color = '#00ffcc';
+            if (rouletteMsg) {
+                rouletteMsg.textContent = lang.rouletteSniper(winPrize);
+                rouletteMsg.style.color = '#00ffcc';
+            }
         } else {
-            rouletteMsg.textContent = lang.rouletteGood(winPrize);
-            rouletteMsg.style.color = '#ffff00';
+            if (rouletteMsg) {
+                rouletteMsg.textContent = lang.rouletteGood(winPrize);
+                rouletteMsg.style.color = '#ffff00';
+            }
         }
         balance += winPrize;
         playSound('win');
         createCoinExplosion();
     } else {
-        rouletteMsg.textContent = lang.rouletteMiss;
-        rouletteMsg.style.color = '#ff0055';
+        if (rouletteMsg) {
+            rouletteMsg.textContent = lang.rouletteMiss;
+            rouletteMsg.style.color = '#ff0055';
+        }
         playSound('lose');
     }
     updateBalanceDisplay();
@@ -663,7 +735,7 @@ function createCoinExplosion() {
     for (let i = 0; i < coinCount; i++) {
         const coin = document.createElement('div');
         coin.className = 'pixel-coin';
-        const startX = window.innerWidth / 2 + 100; 
+        const startX = window.innerWidth / 2; 
         const startY = window.innerHeight / 2;
         coin.style.left = `${startX}px`;
         coin.style.top = `${startY}px`;
@@ -689,8 +761,9 @@ function createCoinExplosion() {
     }
 }
 
-const buyButtons = document.querySelectorAll('.shop-btn');
+// Shop Rendering & Buying
 function renderShop() {
+    const buyButtons = document.querySelectorAll('.shop-btn');
     const lang = i18nData[currentLang];
     buyButtons.forEach(btn => {
         const skinName = btn.id.replace('btn-skin-', '');
@@ -721,30 +794,33 @@ function renderShop() {
     });
 }
 
-buyButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-        const skinName = btn.id.replace('btn-skin-', '');
-        if (purchasedSkins.includes(skinName)) {
-            currentSkin = skinName;
-            playSound('click');
-        } else {
-            const price = parseInt(btn.getAttribute('data-price'));
-            if (balance >= price) {
-                balance -= price;
-                purchasedSkins.push(skinName);
+function setupShopListeners() {
+    document.querySelectorAll('.shop-btn').forEach(btn => {
+        btn.onclick = () => {
+            const skinName = btn.id.replace('btn-skin-', '');
+            if (purchasedSkins.includes(skinName)) {
                 currentSkin = skinName;
-                playSound('win');
+                playSound('click');
+            } else {
+                const price = parseInt(btn.getAttribute('data-price'));
+                if (balance >= price) {
+                    balance -= price;
+                    purchasedSkins.push(skinName);
+                    currentSkin = skinName;
+                    playSound('win');
+                }
             }
-        }
-        localStorage.setItem('currentSkin', currentSkin);
-        localStorage.setItem('purchasedSkins', JSON.stringify(purchasedSkins));
-        updateBalanceDisplay();
-        applySkin();
-        renderShop();
+            localStorage.setItem('currentSkin', currentSkin);
+            localStorage.setItem('purchasedSkins', JSON.stringify(purchasedSkins));
+            updateBalanceDisplay();
+            applySkin();
+            renderShop();
+        };
     });
-});
+}
 
 function applySkin() {
+    if (!machineBody) return;
     machineBody.classList.remove('theme-neon', 'theme-gold', 'theme-blue', 'theme-grey', 'theme-green', 'theme-wave', 'theme-void');
     if (currentSkin === 'neon') machineBody.classList.add('theme-neon');
     if (currentSkin === 'gold') machineBody.classList.add('theme-gold');
@@ -777,114 +853,21 @@ window.adminResetStorage = function() {
     applySkin();
     renderShop();
     checkBankruptStatus();
-    navButtons[0].click();
+    if (navButtons[0]) navButtons[0].click();
 };
 
-if (isAdminActivated) { buildAdminButton(); }
-switchLanguage(currentLang);
-setupTabNavigation();
-updateBalanceDisplay();
-applySkin();
-checkBankruptStatus();
-
-// Mobile Sidebar Toggle
 window.toggleMobileSidebar = function() {
     const sidebar = document.getElementById('sidebar');
     const backdrop = document.getElementById('sidebar-backdrop');
-    sidebar.classList.toggle('open');
-    backdrop.classList.toggle('active');
+    if (sidebar) sidebar.classList.toggle('open');
+    if (backdrop) backdrop.classList.toggle('active');
 };
 
-// Auto close sidebar on mobile when tab clicked
-function handleTabClick(e) {
-    if (isSpinning) return; 
-
-    const clickedButton = e.currentTarget;
-    navButtons.forEach(btn => btn.classList.remove('active'));
-    clickedButton.classList.add('active');
-
-    const targetTabId = clickedButton.getAttribute('data-tab');
-    tabSections.forEach(section => section.classList.remove('active-tab'));
-    document.getElementById(targetTabId).classList.add('active-tab');
-    
-    // Close sidebar on touch devices after choosing a menu item
-    const sidebar = document.getElementById('sidebar');
-    const backdrop = document.getElementById('sidebar-backdrop');
-    if (sidebar.classList.contains('open')) {
-        sidebar.classList.remove('open');
-        backdrop.classList.remove('active');
-    }
-
-    if (targetTabId === 'tab-shop') {
-        renderShop();
-    }
-    
-    if (targetTabId === 'tab-roulette') {
-        drawDvdStatic();
-    } else {
-        if (rouletteActive) {
-            stopRouletteGame(false);
-        }
-    }
-    
-    playSound('click');
-}
-
-// Touch and Mouse Lever Control
-function handleDragStart(clientY) {
-    if (isSpinning) return;
-    if (balance < 100) {
-        checkBankruptStatus();
-        return;
-    }
-    isDragging = true;
-    startY = clientY;
-    shaft.classList.remove('lever-returning');
-    playSound('click');
-}
-
-function handleDragMove(clientY) {
-    if (!isDragging) return;
-
-    let deltaY = clientY - startY;
-    if (deltaY < 0) deltaY = 0;
-    if (deltaY > maxPull) deltaY = maxPull;
-
-    let scaleY = 1 - (deltaY / maxPull) * 0.75;
-    shaft.style.transform = `scaleY(${scaleY})`;
-
-    if (deltaY >= maxPull * 0.9) {
-        triggerSpin();
-    }
-}
-
-// Mouse events
-knob.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    handleDragStart(e.clientY);
-});
-
-window.addEventListener('mousemove', (e) => {
-    handleDragMove(e.clientY);
-});
-
-window.addEventListener('mouseup', () => {
-    if (!isDragging) return;
-    resetLever();
-});
-
-// Touch events for mobile phones
-knob.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    handleDragStart(e.touches[0].clientY);
-}, { passive: false });
-
-window.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    handleDragMove(e.touches[0].clientY);
-}, { passive: false });
-
-window.addEventListener('touchend', () => {
-    if (!isDragging) return;
-    resetLever();
-});
+// Initial App Launch
+if (isAdminActivated) { buildAdminButton(); }
+switchLanguage(currentLang);
+setupTabNavigation();
+setupShopListeners();
+updateBalanceDisplay();
+applySkin();
+checkBankruptStatus();

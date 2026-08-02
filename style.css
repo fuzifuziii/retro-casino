@@ -436,6 +436,7 @@ body {
     align-items: center;
     justify-content: center;
     padding-right: 50px; 
+    padding-left: 35px;
     margin: 0 auto;
     box-sizing: border-box;
 }
