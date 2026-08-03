@@ -1,5 +1,5 @@
 const COIN_COUNT = 24;
-const COIN_LIFETIME = 900; // ms
+const COIN_LIFETIME = 900;
 
 export function createCoinExplosion() {
     const originX = window.innerWidth / 2;
@@ -15,7 +15,7 @@ export function createCoinExplosion() {
         const angle = Math.random() * Math.PI * 2;
         const distance = 80 + Math.random() * 220;
         const dx = Math.cos(angle) * distance;
-        const dy = Math.sin(angle) * distance - 60; // slight upward bias
+        const dy = Math.sin(angle) * distance - 60;
         const rotation = (Math.random() - 0.5) * 720;
 
         const animation = coin.animate(
