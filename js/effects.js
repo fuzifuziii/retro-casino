@@ -1,44 +1,37 @@
-// Purely visual effects not tied to game state.
-const COIN_COUNT = 25;
-const GRAVITY = 0.35;
-const FADE_STEP = 0.025;
-const FRAME_MS = 20;
+const COIN_COUNT = 24;
+const COIN_LIFETIME = 900; // ms
 
-/** Flying pixel coins bursting from the center of the screen (win effect). */
 export function createCoinExplosion() {
-    const container = document.body;
-    const startX = window.innerWidth / 2;
-    const startY = window.innerHeight / 2;
+    const originX = window.innerWidth / 2;
+    const originY = window.innerHeight / 2;
 
     for (let i = 0; i < COIN_COUNT; i++) {
         const coin = document.createElement('div');
         coin.className = 'pixel-coin';
-        coin.style.left = `${startX}px`;
-        coin.style.top = `${startY}px`;
-        container.appendChild(coin);
+        coin.style.left = `${originX}px`;
+        coin.style.top = `${originY}px`;
+        document.body.appendChild(coin);
 
         const angle = Math.random() * Math.PI * 2;
-        const velocity = Math.random() * 6 + 4;
-        let velX = Math.cos(angle) * velocity;
-        let velY = Math.sin(angle) * velocity - 4;
-        let posX = startX;
-        let posY = startY;
-        let opacity = 1;
+        const distance = 80 + Math.random() * 220;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance - 60; // slight upward bias
+        const rotation = (Math.random() - 0.5) * 720;
 
-        const intervalId = setInterval(() => {
-            velY += GRAVITY;
-            posX += velX;
-            posY += velY;
-            opacity -= FADE_STEP;
-
-            coin.style.left = `${posX}px`;
-            coin.style.top = `${posY}px`;
-            coin.style.opacity = opacity;
-
-            if (opacity <= 0 || posY > window.innerHeight) {
-                clearInterval(intervalId);
-                coin.remove();
+        const animation = coin.animate(
+            [
+                { transform: 'translate(-50%, -50%) rotate(0deg)', opacity: 1 },
+                {
+                    transform: `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rotation}deg)`,
+                    opacity: 0,
+                },
+            ],
+            {
+                duration: COIN_LIFETIME + Math.random() * 300,
+                easing: 'cubic-bezier(0.2, 0.8, 0.4, 1)',
             }
-        }, FRAME_MS);
+        );
+
+        animation.onfinish = () => coin.remove();
     }
 }
