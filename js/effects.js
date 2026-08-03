@@ -1,6 +1,4 @@
-// effects.js
 // Purely visual effects not tied to game state.
-
 const COIN_COUNT = 25;
 const GRAVITY = 0.35;
 const FADE_STEP = 0.025;
